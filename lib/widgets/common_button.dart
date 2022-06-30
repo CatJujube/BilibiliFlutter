@@ -14,7 +14,7 @@ class CommonButton extends StatefulWidget {
     this.enable = true
   }) : super(key: key);
 
-  VoidCallback onTap =  (){};
+  VoidCallback? onTap =  (){};
   String title = "";
   Color textColor = Colors.white;
   Color backgroundColor = Colors.pinkAccent;

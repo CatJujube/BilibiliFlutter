@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class BColor{
 
   static const Color DEFALUT_TEXT_GRAY = Color(0xFFE0E0E0);
+  static const Color DEFALUT_UNDERLINE_GRAY = Color(0xFFE0E0E0);
+
 
   static const int _whitePrimaryValue = 0xFFFFFFFF;
 

@@ -1,8 +1,9 @@
-import 'package:bilibili_flutter/pages/login_register_page.dart';
-import 'package:bilibili_flutter/values/colors.dart';
+import 'package:bilibili_flutter/pages/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.white));
   runApp(MyApp());
 }
 
@@ -13,9 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: BColor.materialWhite,
+        primaryColor: Colors.white
       ),
-      home: LoginRegisterPage(),
+      home: MainPage(),
     );
   }
 }
