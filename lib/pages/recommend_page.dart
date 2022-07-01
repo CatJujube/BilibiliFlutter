@@ -1,3 +1,4 @@
+import 'package:bilibili_flutter/model/home_page_tab_bean.dart';
 import 'package:bilibili_flutter/utils/navigation_utils.dart';
 import 'package:bilibili_flutter/widgets/video_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,15 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 class RecommendPage extends StatefulWidget {
-  RecommendPage(this.imgs,this.videoList,{Key? key}) : super(key: key);
-  List<String> imgs=[
-    'http://xxxx/img1.jpg',
-    'http://xxxx/img2.jpg',
-    'http://xxxx/img3.jpg',
-    'http://xxxx/img4.jpg'
-  ];
-
-  List<String> videoList = [];
+  RecommendPage(this.slidBeans,this.videoList,{Key? key}) : super(key: key);
+  List<SlidShowBean> slidBeans;
+  List<VideoCardBean> videoList;
 
   @override
   _RecommendPageState createState() => _RecommendPageState();
@@ -31,7 +26,7 @@ class _RecommendPageState extends State<RecommendPage> {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 10,
+          // mainAxisSpacing: 10,
         ),
           children: buildVideoList(widget.videoList),
           physics: NeverScrollableScrollPhysics(),
@@ -45,22 +40,27 @@ class _RecommendPageState extends State<RecommendPage> {
       height: 200,
       margin: EdgeInsets.all(4),
       child: new Swiper(
+        autoplay: true,
         itemBuilder: (BuildContext context,int index){
-          return RoundImage(5, widget.imgs[index]);
+          return RoundImage(5, widget.slidBeans[index].url);
         },
-        itemCount: widget.imgs.length,
-        pagination: new SwiperPagination(),//如果不填则不显示指示点
+        itemCount: widget.slidBeans.length,
+        pagination: new SwiperPagination(
+          builder: DotSwiperPaginationBuilder(
+            color: Colors.grey
+          )
+        ),//如果不填则不显示指示点
         // control: new SwiperControl(),//如果不填则不显示左右按钮
       ),
     );
   }
 
-  List<Widget> buildVideoList(List<String> videos){
+  List<Widget> buildVideoList(List<VideoCardBean> videos){
     List<Widget> ret = [];
-    videos.forEach((url) {
+    videos.forEach((videoBean) {
       ret.add(
         Container(
-          child: VideoCard(url,"从校服到婚纱，我们共同成长的14年很长很长。","司同学和韩豆豆很长很长很长",(){
+          child: VideoCard(videoBean.url,videoBean.title,videoBean.userName,(){
             NavigationUtils.navToEmptyPage(context, "视频");
           },(){
             NavigationUtils.navToEmptyPage(context, "更多");

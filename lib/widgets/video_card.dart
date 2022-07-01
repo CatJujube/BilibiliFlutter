@@ -54,7 +54,10 @@ class _VideoCardState extends State<VideoCard> {
   Widget videoTitle(){
     return Container(
       margin: EdgeInsets.all(4),
-      child: Text(widget.title ?? "",style: TextStyle(fontSize: FontSize.FONT_SIZE_SAMLLEST,color: Colors.black),),
+      child: Text(widget.title ?? "",
+        maxLines: 3,
+        style: TextStyle(fontSize: FontSize.FONT_SIZE_SAMLL,
+            color: Colors.black),),
     );
   }
 
@@ -70,19 +73,22 @@ class _VideoCardState extends State<VideoCard> {
             margin: EdgeInsets.only(left: 5,right: 5),
             child: Text(
                 "竖屏",
-                style: TextStyle(fontSize: FontSize.FONT_SIZE_SAMLLEST,
+                style: TextStyle(fontSize: FontSize.FONT_SIZE_SAMLL,
                   color: Colors.deepOrange[700],fontWeight: FontWeight.normal,)
             )),
         Expanded(child: Text(widget.upName ?? "",
+          maxLines: 1,
           style: TextStyle(
-              fontSize: FontSize.FONT_SIZE_SAMLLEST,
-              color: Colors.grey[400]
+              fontSize: FontSize.FONT_SIZE_SAMLL,
+              color: Colors.grey[400],
           ),)),
         Container(
+          width: 15,
+          height: 15,
           child: IconButton(icon: Icon(Icons.more_vert,size: 15,color: Colors.grey[400]),
               onPressed: widget.onMoreTap,
             iconSize: 15,
-            padding: EdgeInsets.all(2),
+            padding: EdgeInsets.all(0),
           ),
         )
       ],

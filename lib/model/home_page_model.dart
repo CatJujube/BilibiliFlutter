@@ -1,3 +1,0 @@
-class HomePageModel{
-  List tabs = [];
-}

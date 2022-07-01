@@ -1,5 +1,9 @@
 import 'package:bilibili_flutter/model/b_setting.dart';
-import 'package:bilibili_flutter/model/home_page_model.dart';
+import 'package:bilibili_flutter/model/base_page_bean.dart';
+import 'package:bilibili_flutter/model/home_page_tab_bean.dart';
+import 'package:bilibili_flutter/model/hot_page_bean.dart';
+import 'package:bilibili_flutter/pages/empty_page.dart';
+import 'package:bilibili_flutter/pages/hot_page.dart';
 import 'package:bilibili_flutter/pages/recommend_page.dart';
 import 'package:bilibili_flutter/pages/login_register_page.dart';
 import 'package:bilibili_flutter/repo/home_page_repo.dart';
@@ -18,26 +22,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  HomePageModel _model = HomePageRepo().mockData();
+  List<BasePageBean> tabPageList = HomePageRepo().mockData();
 
   @override
   void initState() {
     super.initState();
 
-    _tabController = TabController(length: _model.tabs.length, vsync: this);
+    _tabController = TabController(length: tabPageList.length, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance!.addPostFrameCallback((_){
-    //   Overlay.of(context)?.insert(this._tabBarOverlay(() {
-    //     NavigationUtils.navToEmptyPage(context, "");
-    //   }));
-    // });
+
     return Scaffold(
       appBar: SAppBarSearch(
         leading: InkWell(
-           child: CircleAvatar(child: Text("登陆",style: TextStyle(color: Colors.pinkAccent,
+           child: CircleAvatar(child: Text("登录",style: TextStyle(color: Colors.pinkAccent,
                fontSize: FontSize.FONT_SIZE_SAMLL,
                fontWeight: FontWeight.bold),),
              backgroundColor: Colors.grey[100],),
@@ -48,9 +48,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
         bottom: RightButtonTabBar(
           controller:_tabController,
-          tabs: _model.tabs.map((e){
+          tabs: tabPageList.map((tabBean){
             return Container(
-              child: RightButtonTab(text: e),
+              child: RightButtonTab(text: HomePageTabType.tabTypeMapper(tabBean.tabType),),
             );
           }).toList(),
           indicatorColor: Colors.pinkAccent,
@@ -75,55 +75,34 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
       body: RightButtonTabBarView( //构建
         controller: _tabController,
-        children: _model.tabs.map((e) {
+        children: tabPageList.map((tabBean) {
           return Container(
               alignment: Alignment.center,
-              child: RecommendPage(swiperList,videoList),
+              child: tabBeanPageMapper(tabBean),
             );
         }).toList(),
       ),
     );
   }
 
-  List<String> swiperList = ["https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp"
-  ];
-
-  List<String> videoList = ["https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/35a01a40de7c96f5b316329ff4fe3cf29a71ddae.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/df5a6193710fa649f0bd5274964f10181fe8f779.png@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/bfaeba881c7f14ffafd9ff37d005a090203d8202.jpg@976w_550h_1c.webp",
-    "https://i0.hdslb.com/bfs/banner/92392ba1d5d6d7ae595cdaa9029fdba920536140.png@976w_550h_1c.webp"
-  ];
-
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
+
+  Widget tabBeanPageMapper(BasePageBean tabBean){
+    int type = tabBean.tabType;
+    switch(type){
+      case HomePageTabType.RECOMMEND_TAB:
+        RecommendPageBean bean = tabBean as RecommendPageBean;
+        return RecommendPage(bean.slidBeanList,bean.videoCardBeanList);
+      case HomePageTabType.HOT_TAB:
+        HotPageBean bean = tabBean as HotPageBean;
+        return HotPage(bean.videoList);
+      default:
+        return EmptyPage("");
+    }
+  }
+
 }
